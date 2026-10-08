@@ -2,168 +2,301 @@
 <html lang="zh-Hant-TW">
 <head>
   <meta charset="UTF-8" />
-  <!-- 優化移動端顯示，確保按鈕在手機/平板上清晰易點 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>小小遊樂場 🎮</title>
+  <title>開心小車車遊樂場 🚗</title>
   <style>
-    /* 1. 設置背景色和基本樣式，使用柔和多彩的設計 */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      user-select: none; /* 防止小朋友連續點擊時選取文字 */
     }
+
     body {
-      /* 繽紛、柔和的背景漸變色 (天藍色到柔和黃色) */
-      background: linear-gradient(135deg, #aedfff 0%, #fff8cd 100%);
-      font-family: "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+      background: linear-gradient(135deg, #a8edf8 0%, #fed6e3 100%);
+      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       min-height: 100vh;
       color: #333;
-      overflow: hidden; /* 防止滾動條影響體驗 */
+      overflow: hidden;
     }
 
-    /* 2. 遊戲容器：更圓潤、更柔和的陰影 */
-    #game-container {
+    /* 容器控制 */
+    .container {
       background: white;
-      border-radius: 40px; /* 大圓角，看起來更親切 */
-      padding: 40px;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); /* 輕柔的陰影 */
+      border-radius: 36px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       text-align: center;
       max-width: 95%;
-      width: 700px;
-      position: relative;
+      width: 600px;
     }
 
-    /* 3. 標題：使用大字體和繽紛色彩 */
+    /* 隱藏頁面的 Class */
+    .hidden {
+      display: none !important;
+    }
+
     h1 {
-      font-size: 3rem; /* 巨大字體 */
-      margin-bottom: 20px;
-      color: #FF6B6B; /* 草莓紅 */
-      text-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+      font-size: 2.2rem;
+      color: #ff5e7e;
+      margin-bottom: 15px;
+      text-shadow: 2px 2px 0px #ffe1e8;
     }
-    h1 span {
-      color: #4CAF50; /* 綠色 */
-    }
-    h1 span.blue {
-      color: #2196F3; /* 藍色 */
-    }
-    p {
-      font-size: 1.5rem;
+
+    p.subtitle {
+      font-size: 1.3rem;
       color: #666;
       margin-bottom: 20px;
     }
 
-    /* 4. 畫布：加上圓角和鮮豔邊框 */
-    canvas {
-      border: 6px solid #FFC107; /* 鮮豔的黃色邊框 */
-      border-radius: 20px;
-      background: #fafafa;
-      margin-top: 10px;
-      max-width: 100%;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+    /* -----------------------------------
+       第一頁：揀車車 (Vehicle Selection)
+    ----------------------------------- */
+    .car-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 25px;
     }
 
-    /* 5. 按鈕：巨大、鮮豔、易點擊 */
-    #startBtn {
-      background-color: #FF6B6B; /* 草莓紅 */
+    .car-card {
+      background: #f8f9fa;
+      border: 4px solid #e0e0e0;
+      border-radius: 24px;
+      padding: 15px 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .car-card .emoji {
+      font-size: 4rem;
+      line-height: 1.1;
+    }
+
+    .car-card .name {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-top: 8px;
+      color: #444;
+    }
+
+    /* 車子被選中時的效果 */
+    .car-card.selected {
+      border-color: #ff9f43;
+      background: #fff8e7;
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(255, 159, 67, 0.3);
+    }
+
+    .big-btn {
+      background-color: #2ed573;
       color: white;
-      padding: 20px 40px;
+      padding: 18px;
       border: none;
-      border-radius: 50px; /* 大圓角按鈕 */
-      font-size: 2rem; /* 巨大字體 */
+      border-radius: 50px;
+      font-size: 1.8rem;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 30px;
-      width: 100%; /* 全寬度，更易點擊 */
-      box-shadow: 0 6px 0px #e05e5e; /* 按鈕立體感 */
-      transition: all 0.1s; /* 按下時的動畫 */
+      width: 100%;
+      box-shadow: 0 6px 0px #26af5f;
+      transition: all 0.1s;
     }
-    #startBtn:hover {
-      background-color: #ff8080;
+
+    .big-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0px #26af5f;
     }
-    #startBtn:active {
-      transform: translateY(4px); /* 按下時稍微下沉 */
-      box-shadow: 0 2px 0px #e05e5e;
+
+    /* -----------------------------------
+       第二頁：進入馬路 (Road Game)
+    ----------------------------------- */
+    #gameCanvas {
+      background-color: #555; /* 馬路顏色 */
+      border: 6px solid #444;
+      border-radius: 20px;
+      max-width: 100%;
+      box-shadow: inset 0 0 12px rgba(0,0,0,0.5);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .ctrl-btn {
+      flex: 1;
+      background: #70a1ff;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 15px 0;
+      font-size: 1.6rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 5px 0px #1e90ff;
+    }
+
+    .ctrl-btn:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0px #1e90ff;
+    }
+
+    .back-btn {
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 12px;
     }
   </style>
 </head>
 <body>
 
-  <div id="game-container">
-    <h1><span>小</span><span>小</span>遊戲<span class="blue">園</span> 🎮</h1>
-    <p>點擊「✨ 開始」按鈕，一起來玩吧！</p>
-    
-    <!-- 遊戲畫布區域 -->
-    <canvas id="gameCanvas" width="600" height="400"></canvas>
-    
-    <br>
-    <!-- 按鈕：更名為繁體中文 -->
-    <button id="startBtn" onclick="startGame()">✨ 開始遊戲</button>
+  <!-- 第一頁：揀車車頁面 -->
+  <div id="selection-screen" class="container">
+    <h1>🚗 揀一輛你喜歡的小車車！</h1>
+    <p class="subtitle">點擊小車車，然後按「出發」</p>
+
+    <div class="car-grid">
+      <div class="car-card selected" onclick="selectCar('消防車', '🚒')" id="card-消防車">
+        <span class="emoji">🚒</span>
+        <span class="name">消防車</span>
+      </div>
+      <div class="car-card" onclick="selectCar('警車', '🚓')" id="card-警車">
+        <span class="emoji">🚓</span>
+        <span class="name">警車</span>
+      </div>
+      <div class="car-card" onclick="selectCar('計程車', '🚕')" id="card-計程車">
+        <span class="emoji">🚕</span>
+        <span class="name">計程車</span>
+      </div>
+      <div class="car-card" onclick="selectCar('賽車', '🏎️')" id="card-賽車">
+        <span class="emoji">🏎️</span>
+        <span class="name">賽車</span>
+      </div>
+    </div>
+
+    <button class="big-btn" onclick="goToRoad()">🚦 出發！進入馬路</button>
+  </div>
+
+  <!-- 第二頁：馬路遊戲頁面 -->
+  <div id="game-screen" class="container hidden">
+    <button class="back-btn" onclick="goToSelection()">↩️ 重新揀車</button>
+    <h1 id="game-title">🛣️ 小車車出發囉！</h1>
+
+    <!-- 馬路繪圖畫布 -->
+    <canvas id="gameCanvas" width="360" height="420"></canvas>
+
+    <!-- 適合5歲小朋友操作的大按鈕 -->
+    <div class="controls">
+      <button class="ctrl-btn" onclick="moveCar(-30)">⬅️ 向左邊</button>
+      <button class="ctrl-btn" onclick="moveCar(30)">向右邊 ➡️</button>
+    </div>
   </div>
 
   <script>
+    // 當前揀選的車子資料
+    let currentCar = {
+      name: '消防車',
+      emoji: '🚒'
+    };
+
+    // 遊戲狀態與變數
+    let carX = 150; // 車子在馬路上的X座標
+    let roadOffsetY = 0; // 馬路黃線移動效果
+    let animationFrameId = null;
+
+    // 1. 選擇車子函數
+    function selectCar(name, emoji) {
+      currentCar.name = name;
+      currentCar.emoji = emoji;
+
+      // 更新卡片外觀（邊框高亮）
+      document.querySelectorAll('.car-card').forEach(card => card.classList.remove('selected'));
+      document.getElementById('card-' + name).classList.add('selected');
+    }
+
+    // 2. 切換到第二頁：進入馬路
+    function goToRoad() {
+      document.getElementById('selection-screen').classList.add('hidden');
+      document.getElementById('game-screen').classList.remove('hidden');
+      document.getElementById('game-title').innerText = `🛣️ ${currentCar.name}出發囉！`;
+
+      // 初始化車子位置
+      carX = 150;
+      
+      // 開始馬路動畫
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      drawRoadGame();
+    }
+
+    // 3. 返回第一頁：重新揀車
+    function goToSelection() {
+      document.getElementById('game-screen').classList.add('hidden');
+      document.getElementById('selection-screen').classList.remove('hidden');
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    }
+
+    // 4. 控制車子左右移動
+    function moveCar(deltaX) {
+      carX += deltaX;
+      // 限制車子不能開出馬路外
+      if (carX < 30) carX = 30;
+      if (carX > 270) carX = 270;
+    }
+
+    // 5. 馬路繪畫與滾動循環動畫
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
 
-    // 初始狀態
-    function init() {
-        ctx.fillStyle = '#EEE';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#999';
-        ctx.font = '30px "Microsoft JhengHei"';
-        ctx.textAlign = 'center';
-        ctx.fillText('等待遊戲開始...', canvas.width/2, canvas.height/2);
-    }
-    init();
-
-    // 遊戲開始函數：更新為畫一個可愛的彩虹笑臉
-    function startGame() {
-      // 1. 清空畫布
+    function drawRoadGame() {
+      // 清空畫布
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#fafafa';
+
+      // 繪製灰色馬路
+      ctx.fillStyle = '#555';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 2. 畫彩虹
-      const rainbowColors = ['#FF6B6B', '#FF9F43', '#FFC107', '#4CAF50', '#2196F3', '#9C27B0'];
-      for (let i = 0; i < rainbowColors.length; i++) {
-          ctx.beginPath();
-          ctx.lineWidth = 10;
-          ctx.strokeStyle = rainbowColors[i];
-          ctx.arc(300, 300, 150 + i * 10, Math.PI, 0);
-          ctx.stroke();
-      }
+      // 繪製馬路兩邊草地
+      ctx.fillStyle = '#7bed9f';
+      ctx.fillRect(0, 0, 20, canvas.height); // 左草地
+      ctx.fillRect(canvas.width - 20, 0, 20, canvas.height); // 右草地
 
-      // 3. 畫笑臉
-      ctx.beginPath();
-      ctx.fillStyle = '#FFC107'; // 黃色
-      ctx.arc(300, 150, 60, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.closePath();
-
-      // 眼
-      ctx.beginPath();
-      ctx.fillStyle = '#333';
-      ctx.arc(280, 130, 8, 0, Math.PI * 2); // 左眼
-      ctx.arc(320, 130, 8, 0, Math.PI * 2); // 右眼
-      ctx.fill();
-      ctx.closePath();
-
-      // 嘴
-      ctx.beginPath();
+      // 繪製馬路中間滾動的黃色虛線
+      ctx.strokeStyle = '#f1c40f';
       ctx.lineWidth = 6;
-      ctx.strokeStyle = '#333';
-      ctx.arc(300, 155, 30, 0, Math.PI); // 下弧線
-      ctx.stroke();
-      ctx.closePath();
+      ctx.setLineDash([30, 20]); // 30px線段，20px留白
+      ctx.lineDashOffset = -roadOffsetY;
 
-      // 4. 添加文字反饋 (繁體中文)
-      ctx.fillStyle = '#FF6B6B';
-      ctx.font = 'bold 40px "Microsoft JhengHei"';
+      ctx.beginPath();
+      ctx.moveTo(canvas.width / 2, 0);
+      ctx.lineTo(canvas.width / 2, canvas.height);
+      ctx.stroke();
+
+      // 移動馬路虛線（產生前進感覺）
+      roadOffsetY += 4;
+      if (roadOffsetY > 50) roadOffsetY = 0;
+
+      // 繪製小朋友揀選的車子 (Emoji 圖案)
+      ctx.font = '60px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('☀️ 遊戲開始囉！', 300, 260);
+      ctx.fillText(currentCar.emoji, carX, 350);
+
+      // 循環繪製下一幀
+      animationFrameId = requestAnimationFrame(drawRoadGame);
     }
   </script>
 </body>
