@@ -80,4 +80,65 @@
   </div>
 
   <script>
-    let car = '🚌', x = 130, score = 0, obs
+    let car = '🚌', x = 130, score = 0, obs = [], timer = null;
+    const cvs = document.getElementById('cvs');
+    const ctx = cvs.getContext('2d');
+
+    function pick(emoji) {
+      car = emoji;
+      document.querySelectorAll('.btn-car').forEach(b => b.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+    }
+
+    function goGame() {
+      document.getElementById('page-select').classList.add('hidden');
+      document.getElementById('page-game').classList.remove('hidden');
+      x = 130; score = 0; obs = [];
+      document.getElementById('score').innerText = `進度: 0 / 25`;
+      if(timer) clearInterval(timer);
+      timer = setInterval(loop, 30);
+    }
+
+    function goSelect() {
+      document.getElementById('page-game').classList.add('hidden');
+      document.getElementById('page-select').classList.remove('hidden');
+      clearInterval(timer);
+    }
+
+    function move(dir) {
+      x += dir;
+      if(x < 20) x = 20;
+      if(x > 240) x = 240;
+    }
+
+    function loop() {
+      ctx.clearRect(0,0,300,320);
+      ctx.fillStyle = '#555'; ctx.fillRect(0,0,300,320);
+      ctx.fillStyle = '#7bed9f'; ctx.fillRect(0,0,20,320); ctx.fillRect(280,0,20,320);
+
+      if(Math.random() < 0.04 && obs.length < 3) {
+        obs.push({ x: Math.floor(Math.random()*200)+30, y: -30 });
+      }
+
+      for(let i=obs.length-1; i>=0; i--) {
+        obs[i].y += 3;
+        ctx.font = '30px sans-serif';
+        ctx.fillText('🏢', obs[i].x, obs[i].y);
+
+        if(obs[i].y > 330) {
+          obs.splice(i, 1);
+          score++;
+          document.getElementById('score').innerText = `進度: ${score} / 25`;
+          if(score >= 25) {
+            alert('🎉 恭喜通關！成功避開 25 個障礙物！');
+            goSelect();
+          }
+        }
+      }
+
+      ctx.font = '40px sans-serif';
+      ctx.fillText(car, x, 280);
+    }
+  </script>
+</body>
+</html>
