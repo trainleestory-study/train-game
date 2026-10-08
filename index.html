@@ -19,10 +19,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       min-height: 100vh;
       color: #333;
-      overflow: hidden;
+      padding: 15px 10px;
+      overflow-y: auto; /* 允許垂直滾動，防止卡片被裁切 */
     }
 
     .container {
@@ -31,8 +32,9 @@
       padding: 20px 15px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       text-align: center;
-      max-width: 95%;
-      width: 480px;
+      max-width: 100%;
+      width: 440px;
+      margin: auto 0; /* 在彈性盒中自動居中 */
       position: relative;
     }
 
@@ -41,14 +43,14 @@
     }
 
     h1 {
-      font-size: 2rem;
+      font-size: 1.8rem;
       color: #ff5e7e;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       text-shadow: 2px 2px 0px #ffe1e8;
     }
 
     p.subtitle {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       color: #666;
       margin-bottom: 15px;
     }
@@ -57,15 +59,15 @@
     .car-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-bottom: 20px;
+      gap: 12px;
+      margin-bottom: 18px;
     }
 
     .car-card {
       background: #f8f9fa;
       border: 4px solid #e0e0e0;
-      border-radius: 24px;
-      padding: 15px 10px;
+      border-radius: 20px;
+      padding: 12px 8px;
       cursor: pointer;
       transition: all 0.2s ease;
       display: flex;
@@ -74,19 +76,154 @@
     }
 
     .car-card .emoji {
-      font-size: 3.8rem;
+      font-size: 3.5rem;
       line-height: 1.1;
     }
 
     .car-card .name {
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       font-weight: bold;
-      margin-top: 8px;
+      margin-top: 6px;
       color: #444;
     }
 
     .car-card.selected {
       border-color: #ff9f43;
       background: #fff8e7;
-      transform: scale(1.05);
+      transform: scale(1.03);
       box-shadow: 0 6px 16px rgba(255, 159, 67, 0.3);
+    }
+
+    .start-btn {
+      background-color: #2ed573;
+      color: white;
+      padding: 15px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 6px 0px #26af5f;
+      transition: all 0.1s;
+    }
+
+    .start-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0px #26af5f;
+    }
+
+    /* 第二頁：遊戲頁面 */
+    .game-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 5px;
+    }
+
+    .progress-box {
+      font-size: 1rem;
+      font-weight: bold;
+      color: #ff6b6b;
+      background: #ffeaa7;
+      padding: 6px 10px;
+      border-radius: 16px;
+    }
+
+    .back-btn {
+      background: #74b9ff;
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 6px 10px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #gameCanvas {
+      background-color: #555;
+      border: 4px solid #444;
+      border-radius: 18px;
+      max-width: 100%;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    /* 下方中央：軚盤控制區 */
+    .steering-panel {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin-top: 10px;
+      padding: 8px;
+      background: #f1f2f6;
+      border-radius: 22px;
+    }
+
+    .ctrl-btn {
+      background: #ff9f43;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 68px;
+      height: 68px;
+      font-size: 2rem;
+      cursor: pointer;
+      box-shadow: 0 5px 0px #e67e22;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.1s;
+    }
+
+    .ctrl-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0px #e67e22;
+    }
+
+    .wheel-wrapper {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wheel {
+      font-size: 4.2rem;
+      transition: transform 0.15s ease-out;
+      display: inline-block;
+      line-height: 1;
+    }
+
+    /* 通關彈窗 */
+    .victory-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 10;
+    }
+
+    .victory-overlay h2 {
+      font-size: 2rem;
+      color: #2ed573;
+      margin-bottom: 10px;
+    }
+
+    .victory-overlay p {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 20px;
+    }
+  </style>
+</head
