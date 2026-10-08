@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>開心車庫 🏆</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      background: linear-gradient(135deg, #fed6e3 0%, #a8edf8 100%);
+      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #333;
+      padding: 15px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 32px;
+      padding: 25px 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      max-width: 95%;
+      width: 480px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: #ff5e7e;
+      margin-bottom: 8px;
+      text-shadow: 2px 2px 0px #ffe1e8;
+    }
+
+    p.subtitle {
+      font-size: 1.2rem;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .trophy-banner {
+      background: #fff8e7;
+      border: 3px dashed #ff9f43;
+      border-radius: 20px;
+      padding: 12px;
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+      font-weight: bold;
+      color: #d35400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .garage-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .garage-card {
+      background: #f8f9fa;
+      border: 4px solid #74b9ff;
+      border-radius: 24px;
+      padding: 15px 10px;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.2s ease;
+    }
+
+    .garage-card:active {
+      transform: scale(0.95);
+    }
+
+    .bounce {
+      animation: bounceAnim 0.5s ease;
+    }
+
+    @keyframes bounceAnim {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0); }
+    }
+
+    .garage-card .emoji {
+      font-size: 4rem;
+      display: block;
+      line-height: 1.1;
+    }
+
+    .garage-card .name {
+      font-size: 1.3rem;
+      font-weight: bold;
+      margin-top: 8px;
+      color: #2c3e50;
+    }
+
+    .badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background: #ff4757;
+      color: white;
+      font-size: 0.9rem;
+      font-weight: bold;
+      padding: 4px 10px;
+      border-radius: 12px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+
+    .nav-btn {
+      background-color: #2ed573;
+      color: white;
+      padding: 16px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.6rem;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      box-shadow: 0 6px 0px #26af5f;
+      text-decoration: none;
+      display: block;
+      transition: all 0.1s;
+    }
+
+    .nav-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0px #26af5f;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🏠 開心車庫</h1>
+    <p class="subtitle">點擊車車聽聲音，或選擇出發！</p>
+
+    <div class="trophy-banner">
+      <span>🏆 避開障礙物英雄</span>
+      <span>⭐ x 25</span>
+    </div>
+
+    <div class="garage-grid">
+      <div class="garage-card" onclick="playCarSound('card-bus', '嗶嗶！巴士準備好啦！')" id="card-bus">
+        <span class="badge">已解鎖</span>
+        <span class="emoji">🚌</span>
+        <span class="name">巴士</span>
+      </div>
+
+      <div class="garage-card" onclick="playCarSound('card-mtr', '叮叮！地鐵出發囉！')" id="card-mtr">
+        <span class="badge">已解鎖</span>
+        <span class="emoji">🚇</span>
+        <span class="name">地鐵</span>
+      </div>
+
+      <div class="garage-card" onclick="playCarSound('card-tram', '叮叮叮！電車來囉！')" id="card-tram">
+        <span class="badge">已解鎖</span>
+        <span class="emoji">🚋</span>
+        <span class="name">電車</span>
+      </div>
+
+      <div class="garage-card" onclick="playCarSound('card-car', '叭叭！私家車加速！')" id="card-car">
+        <span class="badge">已解鎖</span>
+        <span class="emoji">🚗</span>
+        <span class="name">私家車</span>
+      </div>
+    </div>
+
+    <a href="index.html" class="nav-btn">🚗 去開車車遊戲</a>
+  </div>
+
+  <script>
+    function playCarSound(cardId, text) {
+      const card = document.getElementById(cardId);
+      
+      card.classList.remove('bounce');
+      void card.offsetWidth;
+      card.classList.add('bounce');
+
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-HK';
+        utterance.rate = 0.9;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+  </script>
+</body>
+</html>
