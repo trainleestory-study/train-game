@@ -2,228 +2,82 @@
 <html lang="zh-Hant-TW">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>開心車車大冒險 🚗</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    body {
-      background: linear-gradient(135deg, #a8edf8 0%, #fed6e3 100%);
-      font-family: "Microsoft JhengHei", "PingFang TC", sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      color: #333;
-      padding: 15px 10px;
-      overflow-y: auto; /* 允許垂直滾動，防止卡片被裁切 */
-    }
-
-    .container {
-      background: white;
-      border-radius: 32px;
-      padding: 20px 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-      text-align: center;
-      max-width: 100%;
-      width: 440px;
-      margin: auto 0; /* 在彈性盒中自動居中 */
-      position: relative;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    h1 {
-      font-size: 1.8rem;
-      color: #ff5e7e;
-      margin-bottom: 8px;
-      text-shadow: 2px 2px 0px #ffe1e8;
-    }
-
-    p.subtitle {
-      font-size: 1.1rem;
-      color: #666;
-      margin-bottom: 15px;
-    }
-
-    /* 第一頁：選車頁面 */
-    .car-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .car-card {
-      background: #f8f9fa;
-      border: 4px solid #e0e0e0;
-      border-radius: 20px;
-      padding: 12px 8px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .car-card .emoji {
-      font-size: 3.5rem;
-      line-height: 1.1;
-    }
-
-    .car-card .name {
-      font-size: 1.2rem;
-      font-weight: bold;
-      margin-top: 6px;
-      color: #444;
-    }
-
-    .car-card.selected {
-      border-color: #ff9f43;
-      background: #fff8e7;
-      transform: scale(1.03);
-      box-shadow: 0 6px 16px rgba(255, 159, 67, 0.3);
-    }
-
-    .start-btn {
-      background-color: #2ed573;
-      color: white;
-      padding: 15px;
-      border: none;
-      border-radius: 50px;
-      font-size: 1.5rem;
-      font-weight: bold;
-      cursor: pointer;
-      width: 100%;
-      box-shadow: 0 6px 0px #26af5f;
-      transition: all 0.1s;
-    }
-
-    .start-btn:active {
-      transform: translateY(4px);
-      box-shadow: 0 2px 0px #26af5f;
-    }
-
-    /* 第二頁：遊戲頁面 */
-    .game-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      gap: 5px;
-    }
-
-    .progress-box {
-      font-size: 1rem;
-      font-weight: bold;
-      color: #ff6b6b;
-      background: #ffeaa7;
-      padding: 6px 10px;
-      border-radius: 16px;
-    }
-
-    .back-btn {
-      background: #74b9ff;
-      color: white;
-      border: none;
-      border-radius: 16px;
-      padding: 6px 10px;
-      font-size: 0.9rem;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    #gameCanvas {
-      background-color: #555;
-      border: 4px solid #444;
-      border-radius: 18px;
-      max-width: 100%;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-    }
-
-    /* 下方中央：軚盤控制區 */
-    .steering-panel {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      margin-top: 10px;
-      padding: 8px;
-      background: #f1f2f6;
-      border-radius: 22px;
-    }
-
-    .ctrl-btn {
-      background: #ff9f43;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 68px;
-      height: 68px;
-      font-size: 2rem;
-      cursor: pointer;
-      box-shadow: 0 5px 0px #e67e22;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.1s;
-    }
-
-    .ctrl-btn:active {
-      transform: translateY(4px);
-      box-shadow: 0 2px 0px #e67e22;
-    }
-
-    .wheel-wrapper {
-      width: 80px;
-      height: 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .wheel {
-      font-size: 4.2rem;
-      transition: transform 0.15s ease-out;
-      display: inline-block;
-      line-height: 1;
-    }
-
-    /* 通關彈窗 */
-    .victory-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
+    html, body {
       width: 100%;
       height: 100%;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 32px;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #a8edf8 0%, #fed6e3 100%);
+      font-family: sans-serif;
+    }
+    .wrapper {
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      min-height: 100vh;
       padding: 20px;
-      z-index: 10;
+      box-sizing: border-box;
     }
-
-    .victory-overlay h2 {
-      font-size: 2rem;
-      color: #2ed573;
-      margin-bottom: 10px;
+    .card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 20px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
     }
-
-    .victory-overlay p {
-      font-size: 1.2rem;
-      color: #555;
-      margin-bottom: 20px;
+    h1 { color: #ff5e7e; margin-bottom: 10px; font-size: 1.8rem; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0; }
+    .btn-car {
+      background: #f8f9fa; border: 3px solid #ddd; border-radius: 16px;
+      padding: 15px; font-size: 2.5rem; cursor: pointer;
+    }
+    .btn-car.selected { border-color: #ff9f43; background: #fff8e7; }
+    .btn-start {
+      background: #2ed573; color: white; border: none; padding: 15px;
+      width: 100%; border-radius: 30px; font-size: 1.4rem; font-weight: bold; cursor: pointer;
+    }
+    .hidden { display: none !important; }
+    .ctrl-btn {
+      background: #ff9f43; color: white; border: none; border-radius: 50%;
+      width: 65px; height: 65px; font-size: 1.8rem; cursor: pointer; margin: 0 10px;
     }
   </style>
-</head
+</head>
+<body>
+
+  <div class="wrapper">
+    <!-- 選車頁面 -->
+    <div id="page-select" class="card">
+      <h1>🚗 請選一架車車！</h1>
+      <p style="color:#666;">點擊車車，準備出發！</p>
+      <div class="grid">
+        <button class="btn-car selected" onclick="pick('🚌')">🚌<br><span style="font-size:1rem;">巴士</span></button>
+        <button class="btn-car" onclick="pick('🚇')">🚇<br><span style="font-size:1rem;">地鐵</span></button>
+        <button class="btn-car" onclick="pick('🚋')">🚋<br><span style="font-size:1rem;">電車</span></button>
+        <button class="btn-car" onclick="pick('🚗')">🚗<br><span style="font-size:1rem;">私家車</span></button>
+      </div>
+      <button class="btn-start" onclick="goGame()">🚦 出發！避開障礙物</button>
+    </div>
+
+    <!-- 遊戲頁面 -->
+    <div id="page-game" class="card hidden">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <button onclick="goSelect()" style="padding:6px 12px; border-radius:12px; border:none; background:#74b9ff; color:white; font-weight:bold;">↩️ 換車</button>
+        <span id="score" style="font-weight:bold; color:#ff6b6b; background:#ffeaa7; padding:5px 10px; border-radius:12px;">進度: 0 / 25</span>
+      </div>
+      <canvas id="cvs" width="300" height="320" style="background:#555; border-radius:15px;"></canvas>
+      <div style="margin-top:15px; display:flex; justify-content:center; align-items:center;">
+        <button class="ctrl-btn" onmousedown="move(-30)" ontouchstart="move(-30)">⬅️</button>
+        <span style="font-size:3rem;">🎡</span>
+        <button class="ctrl-btn" onmousedown="move(30)" ontouchstart="move(30)">➡️</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let car = '🚌', x = 130, score = 0, obs
